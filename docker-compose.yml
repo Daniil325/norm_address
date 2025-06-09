@@ -1,0 +1,7 @@
+services:
+  redis:
+    image: redis:6.2
+    expose:
+      - 6379
+    ports:
+      - "6379:6379"
