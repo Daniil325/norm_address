@@ -1,11 +1,11 @@
 from typing import AsyncIterator
 
 from dishka import Provider, alias, provide, Scope
-from dadata import DadataAsync
+from httpx import AsyncClient
 from redis.asyncio import Redis
 
 from norm_address.domain.protocols import AddressGateway
-from norm_address.infra.gateway import DadataGateway
+from norm_address.infra.gateway import DadataAddressGateway
 from norm_address.infra.protocols import RedisRepo
 from norm_address.infra.redis import RedisImpl
 from norm_address.settings import Settings
@@ -19,13 +19,17 @@ class DadataProvider(Provider):
         self.settings = settings
 
     @provide
-    async def get_dadata_client(self) -> AsyncIterator[DadataGateway]:
-        async with DadataAsync(
-            self.settings.api_token, self.settings.secret_token
-        ) as client:
-            yield DadataGateway(client)
+    async def get_dadata_client(self) -> AsyncIterator[DadataAddressGateway]:
+        headers = {
+            "Content-type": "application/json",
+            "Accept": "application/json",
+            "Authorization": f"Token {self.settings.api_token}",
+            "X-Secret": self.settings.secret_token
+        }
+        async with AsyncClient(base_url="https://cleaner.dadata.ru/api/v1/clean/address", headers=headers) as client:
+            yield DadataAddressGateway(client)
 
-    dadata_client = alias(source=DadataGateway, provides=AddressGateway)
+    dadata_client = alias(source=DadataAddressGateway, provides=AddressGateway)
 
 
 class RedisProvider(Provider):

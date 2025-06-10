@@ -17,6 +17,7 @@ class NormalizeAddressCommand:
         
         logger.info("Get address from dadata api")
         response = await self.address_gw.get_address(address)
+        print("dddd", response)
         result = response["result"]
         if result:
             logger.info("Set address to redis storage")

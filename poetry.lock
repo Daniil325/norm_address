@@ -75,21 +75,6 @@ files = [
 markers = {main = "platform_system == \"Windows\"", dev = "sys_platform == \"win32\""}
 
 [[package]]
-name = "dadata"
-version = "24.10.0"
-description = "Data cleansing and enrichment via Dadata API."
-optional = false
-python-versions = ">=3.9"
-groups = ["main"]
-files = [
-    {file = "dadata-24.10.0-py3-none-any.whl", hash = "sha256:588a449625435c6d9370f10a15ac669105d974154d077833eddaa38eb933a15b"},
-    {file = "dadata-24.10.0.tar.gz", hash = "sha256:0b6f98a9ef576ec9eebd4b8ca9c6d50f5531685833637bc20fbd5d7b523ede76"},
-]
-
-[package.dependencies]
-httpx = "*"
-
-[[package]]
 name = "dishka"
 version = "1.6.0"
 description = "Cute DI framework with scopes and agreeable API"
@@ -664,4 +649,4 @@ standard = ["colorama (>=0.4)", "httptools (>=0.6.3)", "python-dotenv (>=0.13)",
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12"
-content-hash = "c95a1f493b77c4b8b0cb432aa7ce81ce72560797df95b5982c80be0100faac61"
+content-hash = "b046d3ae4bd39b6d4a41e9de8ef3d14a25c3de2e0a78e642a7a225814b4e809f"
