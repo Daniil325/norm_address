@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from norm_address.application import CommandsProvider
-from norm_address.infra import DadataProvider
+from norm_address.infra import DadataProvider, RedisProvider
 from norm_address.settings import Settings
 from norm_address.api.address import router
 
@@ -23,7 +23,8 @@ def create_app():
     
     container = make_async_container(
         CommandsProvider(),
-        DadataProvider(settings)
+        DadataProvider(settings),
+        RedisProvider(settings)
     )
     
     setup_dishka(container, app)
