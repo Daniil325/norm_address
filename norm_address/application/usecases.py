@@ -9,13 +9,12 @@ class NormalizeAddressCommand:
     address_gw: AddressGateway
     redis_repo: RedisRepo
 
-    async def __call__(self, address: str) -> str:
-        a = await self.redis_repo.get(address)
-        print(a)
+    async def __call__(self, address: str) -> str | None:
         if await self.redis_repo.get(address):
-            return await self.redis_repo.get(address)
-        response = await self.address_gw.get_address(address)
+            return (await self.redis_repo.get(address)).decode()
         
-        if response["result"]:
-            await self.redis_repo.set(address, response["result"])
-        return await self.address_gw.get_address(address)
+        response = await self.address_gw.get_address(address)
+        result = response["result"]
+        if result:
+            await self.redis_repo.set(address, result)
+        return result
