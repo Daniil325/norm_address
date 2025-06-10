@@ -1,5 +1,5 @@
 from dishka.integrations.fastapi import FromDishka, DishkaRoute
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException
 
 from norm_address.application.usecases import NormalizeAddressCommand
 from norm_address.infra.protocols import RedisRepo
@@ -10,9 +10,13 @@ router = APIRouter(
 )
 
 
+def check_address_len(address: str):
+    if len(address) >= 60:
+        raise HTTPException(status_code=400, detail="Превышена длина входного запроса") 
+    return address
+
+
 @router.get("/")
-async def normalize_address(address: str, cmd: FromDishka[NormalizeAddressCommand], redis: FromDishka[RedisRepo]):
+async def normalize_address( cmd: FromDishka[NormalizeAddressCommand], address: str = Depends(check_address_len)):
     result = await cmd(address)
-    await redis.set("aaa", "bbb")
-    print(result)
-    return "result"
+    return result
