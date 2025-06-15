@@ -1,7 +1,33 @@
 services:
   redis:
-    image: redis:6.2
-    expose:
-      - 6379
+    image: redis/redis-stack-server:6.2.6-v15
+    volumes:
+      - redis-data:/data
+    restart: always
     ports:
-      - "6379:6379"
+      - "6370:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks: 
+      - net
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: norm_address_backend
+    ports:
+      - '8000:8000'
+    restart: on-failure
+    networks:
+      - net
+    depends_on:
+      - redis
+    
+volumes:
+  redis-data:
+
+networks:
+  net:
