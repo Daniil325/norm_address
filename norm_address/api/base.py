@@ -12,4 +12,4 @@ class ErrorResponse(BaseModel):
     
 
 class AddressResponseItem(SuccessResponse):
-    result: str
+    result: str | None
